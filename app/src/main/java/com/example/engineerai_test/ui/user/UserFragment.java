@@ -85,6 +85,7 @@ public class UserFragment extends Fragment {
     }
 
     private void initControls() {
+        if(getView() == null) return;
         srLayout = getView().findViewById(R.id.srLayout);
         RecyclerView rvUserList = getView().findViewById(R.id.rvUserList);
         userAdapter = new UserAdapter(usersItemArrayList);
