@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Engineer.Ai_Test</string>
+    <string name="something_went_wrong_please_try_again">Something went wrong \nplease try again</string>
+    <string name="retry">Retry</string>
 </resources>
