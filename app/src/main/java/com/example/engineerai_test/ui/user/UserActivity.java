@@ -24,7 +24,7 @@ public class UserActivity extends AppCompatActivity {
 
     private SwipeRefreshLayout srLayout;
     private int pageNumber = 1;
-    private ArrayList<UsersItem> usersItemArrayList =  new ArrayList<>();
+    private ArrayList<UsersItem> usersItemArrayList = new ArrayList<>();
     private NoPaginate noPaginate;
     private UserAdapter userAdapter;
 
@@ -38,7 +38,7 @@ public class UserActivity extends AppCompatActivity {
     private void initControls() {
         srLayout = findViewById(R.id.srLayout);
         RecyclerView rvUserList = findViewById(R.id.rvUserList);
-        userAdapter =  new UserAdapter(usersItemArrayList);
+        userAdapter = new UserAdapter(usersItemArrayList);
         rvUserList.setAdapter(userAdapter);
 
         noPaginate = NoPaginate.with(rvUserList)
@@ -47,43 +47,41 @@ public class UserActivity extends AppCompatActivity {
                 .build();
 
         srLayout.setOnRefreshListener(() -> {
-            if(Utility.isNetworkAvailable(UserActivity.this)){
-                pageNumber = 1;
-                srLayout.setRefreshing(false);
-                noPaginate.setNoMoreItems(false);
-                usersItemArrayList.clear();
-                userAdapter.setUsersItemArrayList(usersItemArrayList);
-            }else{
-                pageNumber = 1;
-                srLayout.setRefreshing(false);
+
+            pageNumber = 1;
+            srLayout.setRefreshing(false);
+            noPaginate.setNoMoreItems(false);
+            usersItemArrayList.clear();
+            userAdapter.setUsersItemArrayList(usersItemArrayList);
+
+            if (!Utility.isNetworkAvailable(UserActivity.this)) {
                 noPaginate.showError(true);
-                usersItemArrayList.clear();
-                userAdapter.setUsersItemArrayList(usersItemArrayList);
             }
+
         });
 
     }
 
-    public void getUserList(){
-        UserListRequest userListRequest  = new UserListRequest(pageNumber, USER_LIST_PAGE_LIMIT);
-        User user =  new User();
+    public void getUserList() {
+        UserListRequest userListRequest = new UserListRequest(pageNumber, USER_LIST_PAGE_LIMIT);
+        User user = new User();
         noPaginate.showLoading(true);
-        user.getUserList(UserActivity.this,userListRequest, (isSuccess, object) -> {
+        user.getUserList(UserActivity.this, userListRequest, (isSuccess, object) -> {
             noPaginate.showLoading(false);
-            if(srLayout.isRefreshing()){
+            if (srLayout.isRefreshing()) {
                 srLayout.setRefreshing(false);
             }
-            if(isSuccess){
+            if (isSuccess) {
                 Data userData = (Data) object;
-                if(pageNumber == 1){
+                if (pageNumber == 1) {
                     usersItemArrayList.clear();
                 }
                 noPaginate.showError(false);
                 usersItemArrayList.addAll(userData.getUsers());
                 noPaginate.setNoMoreItems(!userData.isHasMore());
                 userAdapter.setUsersItemArrayList(usersItemArrayList);
-                pageNumber ++;
-            }else{
+                pageNumber++;
+            } else {
                 noPaginate.showError(true);
             }
         });
