@@ -22,6 +22,8 @@ import com.example.engineerai_test.data.user.response.UsersItem;
 import com.example.engineerai_test.ui.utility.CustomErrorItem;
 import com.example.engineerai_test.ui.utility.Utility;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 import ru.alexbykov.nopaginate.paginate.NoPaginate;
@@ -31,7 +33,6 @@ import static com.example.engineerai_test.data.user.User.USER_LIST_PAGE_LIMIT;
 
 public class UserFragment extends Fragment {
 
-    public static final String TAG = "UserFragment";
     private SwipeRefreshLayout srLayout;
     private int pageNumber = 1;
     private ArrayList<UsersItem> usersItemArrayList = new ArrayList<>();
@@ -45,7 +46,7 @@ public class UserFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static UserFragment newInstance() {
+    static UserFragment newInstance() {
         UserFragment fragment = new UserFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -53,7 +54,7 @@ public class UserFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
@@ -111,7 +112,7 @@ public class UserFragment extends Fragment {
 
     }
 
-    public void getUserList() {
+    private void getUserList() {
         UserListRequest userListRequest = new UserListRequest(pageNumber, USER_LIST_PAGE_LIMIT);
         User user = new User();
         noPaginate.showLoading(true);
