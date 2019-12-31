@@ -2,4 +2,7 @@
     <string name="app_name">Engineer.Ai_Test</string>
     <string name="something_went_wrong_please_try_again">Something went wrong \nplease try again</string>
     <string name="retry">Retry</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

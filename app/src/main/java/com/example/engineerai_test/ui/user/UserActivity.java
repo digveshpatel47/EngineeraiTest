@@ -1,8 +1,11 @@
 package com.example.engineerai_test.ui.user;
 
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -20,71 +23,21 @@ import ru.alexbykov.nopaginate.paginate.NoPaginate;
 
 import static com.example.engineerai_test.data.user.User.USER_LIST_PAGE_LIMIT;
 
-public class UserActivity extends AppCompatActivity {
-
-    private SwipeRefreshLayout srLayout;
-    private int pageNumber = 1;
-    private ArrayList<UsersItem> usersItemArrayList = new ArrayList<>();
-    private NoPaginate noPaginate;
-    private UserAdapter userAdapter;
+public class UserActivity extends AppCompatActivity implements UserFragment.OnFragmentInteractionListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
-        initControls();
-    }
 
-    private void initControls() {
-        srLayout = findViewById(R.id.srLayout);
-        RecyclerView rvUserList = findViewById(R.id.rvUserList);
-        userAdapter = new UserAdapter(usersItemArrayList);
-        rvUserList.setAdapter(userAdapter);
-
-        noPaginate = NoPaginate.with(rvUserList)
-                .setOnLoadMoreListener(this::getUserList)
-                .setCustomErrorItem(new CustomErrorItem())
-                .build();
-
-        srLayout.setOnRefreshListener(() -> {
-
-            pageNumber = 1;
-            srLayout.setRefreshing(false);
-            noPaginate.setNoMoreItems(false);
-            usersItemArrayList.clear();
-            userAdapter.setUsersItemArrayList(usersItemArrayList);
-
-            if (!Utility.isNetworkAvailable(UserActivity.this)) {
-                noPaginate.showError(true);
-            }
-
-        });
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, UserFragment.newInstance());
+        transaction.commit();
 
     }
 
-    public void getUserList() {
-        UserListRequest userListRequest = new UserListRequest(pageNumber, USER_LIST_PAGE_LIMIT);
-        User user = new User();
-        noPaginate.showLoading(true);
-        user.getUserList(UserActivity.this, userListRequest, (isSuccess, object) -> {
-            noPaginate.showLoading(false);
-            if (srLayout.isRefreshing()) {
-                srLayout.setRefreshing(false);
-            }
-            if (isSuccess) {
-                Data userData = (Data) object;
-                if (pageNumber == 1) {
-                    usersItemArrayList.clear();
-                }
-                noPaginate.showError(false);
-                usersItemArrayList.addAll(userData.getUsers());
-                noPaginate.setNoMoreItems(!userData.isHasMore());
-                userAdapter.setUsersItemArrayList(usersItemArrayList);
-                pageNumber++;
-            } else {
-                noPaginate.showError(true);
-            }
-        });
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }
