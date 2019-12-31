@@ -39,4 +39,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivUserImage" />
 
+    <View
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/color_000"
+        android:layout_marginTop="@dimen/_4sdp"
+        app:layout_constraintTop_toBottomOf="@+id/rvUserImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/_1sdp"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
